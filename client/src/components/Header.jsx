@@ -6,7 +6,7 @@ const Header = () => {
     return (
         <>
             <header>
-                <Navbar bg="dark" variant="dark" expand="md" collapseSelect>
+                <Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
                     <Container>
                         <LinkContainer to="/">
                             <Navbar.Brand href="/">Gametronics</Navbar.Brand>
