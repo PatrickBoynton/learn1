@@ -8,6 +8,8 @@
         "start": "nodemon backend/app.js",
         "client": "npm start --prefix client",
         "dev": "concurrently \"npm start\" \"npm run client\" ",
+        "import": "node backend/seeder.js",
+        "destroy": "node backend/seeder.js -d",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
