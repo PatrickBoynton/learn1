@@ -3,13 +3,13 @@ import Product from '../components/Product'
 import { useGetProductsQuery } from '../slices/productApiSlice'
 
 const HomeScreen = () => {
-  const { data: products, isLoading, isError } = useGetProductsQuery()
+  const { data: products, isLoading, error } = useGetProductsQuery()
   return (
     <>
       {isLoading ? (
         <h1>Loading...</h1>
-      ) : isError ? (
-        <p>{isError?.data?.message || isError?.error}</p>
+      ) : error ? (
+        <p>{error?.data?.message || error?.error}</p>
       ) : (
         <>
           <h1>Latest Products</h1>
