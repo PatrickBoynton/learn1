@@ -17,7 +17,7 @@ export const updateCart = state => {
     Number(state.itemPrice + state.shippingPrice + state.taxPrice)
   )
 
-  localStorage.setItem('cart', state)
+  localStorage.setItem('cart', JSON.stringify(state))
 
   return state
 }
