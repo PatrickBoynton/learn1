@@ -7,7 +7,11 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 })
 
 export const logoutUser = asyncHandler(async (req, res, next) => {
-  res.send('logout')
+  res.cookie('jwt', '', {
+    httpOnly: true,
+    expiresIn: new Date(0),
+  })
+  res.status(200).json({ message: 'Logged out successfully.' })
 })
 
 export const loginUser = asyncHandler(async (req, res, next) => {
