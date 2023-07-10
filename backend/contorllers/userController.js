@@ -1,43 +1,64 @@
-import {asyncHandler} from '../middleware/asyncHandler.js'
+import { asyncHandler } from '../middleware/asyncHandler.js'
 import User from '../models/userModel.js'
+import jwt from 'jsonwebtoken'
 
-
-export const authUser = asyncHandler(async (req, res, next) => {
-    res.send('auth user')
-})
-
-export const registerUser = asyncHandler(async (req,res, next) => {
-    res.send('register user')
+export const registerUser = asyncHandler(async (req, res, next) => {
+  res.send('register user')
 })
 
 export const logoutUser = asyncHandler(async (req, res, next) => {
-    res.send('logout')
+  res.send('logout')
 })
 
 export const loginUser = asyncHandler(async (req, res, next) => {
-    res.send('login')
+  const { email, password } = req.body
+
+  const user = await User.findOne({ email })
+
+  if (user && user.matchPassword(password)) {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SERCRET, {
+      expiresIn: '365d',
+    })
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+      //  365 days in milliseconds
+      maxAge: 31536000000,
+    })
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    })
+  } else {
+    res.status(401)
+    throw new Error('Invalid credentials.')
+  }
 })
 
 export const getUserProfile = asyncHandler(async (req, res, next) => {
-    res.send('Get user profile')
+  res.send('Get user profile')
 })
 
 export const updateProfile = asyncHandler(async (req, res, next) => {
-    res.send('UPDATE profile')
+  res.send('UPDATE profile')
 })
 
 export const getAllUsers = asyncHandler(async (req, res, next) => {
-    res.send('Get all users')
+  res.send('Get all users')
 })
 
 export const getUser = asyncHandler(async (req, res, next) => {
-    res.send('Get User by ID')
+  res.send('Get User by ID')
 })
 
 export const deleteUsers = asyncHandler(async (req, res, next) => {
-    res.send('DELETED')
+  res.send('DELETED')
 })
 
 export const updateUser = asyncHandler(async (req, res, next) => {
-    res.send('UPDATE user')
+  res.send('UPDATE user')
 })
