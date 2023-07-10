@@ -1,6 +1,5 @@
 import { asyncHandler } from '../middleware/asyncHandler.js'
 import User from '../models/userModel.js'
-import jwt from 'jsonwebtoken'
 import { generateToken } from '../utils/generateToken.js'
 import { errorCondition } from '../utils/errorCondition.js'
 
@@ -19,6 +18,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
 
     res.status(201).json({
       _id: user._id,
+      name: user.name,
       email: user.email,
       password: user.password,
     })
@@ -65,7 +65,24 @@ export const getUserProfile = asyncHandler(async (req, res, next) => {
 })
 
 export const updateProfile = asyncHandler(async (req, res, next) => {
-  res.send('UPDATE profile')
+  const user = await User.findById(req.user._id)
+
+  if (user) {
+    user.name = req.user.name || user.name
+    user.email = req.user.email || user.email
+
+    if (req.body.password) user.password = req.body.password
+  } else {
+    errorCondition(res, 404, 'This is not the user you are looking for.')
+  }
+  const updatedUser = await user.save()
+  res.status(200).json({
+    _id: updatedUser._id,
+    name: updatedUser.name,
+    email: updatedUser.email,
+    password: updatedUser.password,
+    isAdmin: updatedUser.isAdmin,
+  })
 })
 
 export const getAllUsers = asyncHandler(async (req, res, next) => {
