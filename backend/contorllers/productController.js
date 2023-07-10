@@ -1,5 +1,6 @@
 import { asyncHandler } from '../middleware/asyncHandler.js'
 import Product from '../models/productModel.js'
+import { errorCondition } from '../utils/errorCondition.js'
 
 export const getProducts = asyncHandler(async (req, res, next) => {
   const products = await Product.find({})
@@ -12,7 +13,6 @@ export const getProductById = asyncHandler(async (req, res, next) => {
   if (product) {
     res.send(product)
   } else {
-    res.status(404)
-    throw new Error('Resource not found.')
+    errorCondition(res, 404, 'Resource not found. ')
   }
 })
