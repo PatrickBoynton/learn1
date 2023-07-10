@@ -2,6 +2,7 @@ import { asyncHandler } from '../middleware/asyncHandler.js'
 import User from '../models/userModel.js'
 import jwt from 'jsonwebtoken'
 import { generateToken } from '../utils/generateToken.js'
+import { errorCondition } from '../utils/errorCondition.js'
 
 export const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body
@@ -22,8 +23,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
       password: user.password,
     })
   } else {
-    res.status(400)
-    throw new Error('Invalid user data. ')
+    errorCondition(res, 400, 'Invalid user data.')
   }
 })
 
@@ -43,20 +43,25 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   if (user && user.matchPassword(password)) {
     generateToken(res, user._id)
 
-    res.json({
+    res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
     })
   } else {
-    res.status(401)
-    throw new Error('Invalid credentials.')
+    errorCondition(res, 401, 'Invalid credentials. ')
   }
 })
 
 export const getUserProfile = asyncHandler(async (req, res, next) => {
-  res.send('Get user profile')
+  const user = await User.findById(req.user._id)
+  const { _id, email, password } = user
+  if (user) {
+    res.status(200).json({ _id, email, password })
+  } else {
+    errorCondition(res, 404, 'This is not the user you are looking for. ')
+  }
 })
 
 export const updateProfile = asyncHandler(async (req, res, next) => {
