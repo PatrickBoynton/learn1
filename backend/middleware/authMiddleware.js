@@ -1,6 +1,10 @@
 import { asyncHandler } from './asyncHandler.js'
 import jwt from 'jsonwebtoken'
 import User from '../models/userModel.js'
+import { errorCondition } from '../utils/errorCondition.js'
+import dotenv from 'dotenv'
+
+dotenv.config({ path: '../.env' })
 
 export const protect = asyncHandler(async (req, res, next) => {
   let token
@@ -14,12 +18,10 @@ export const protect = asyncHandler(async (req, res, next) => {
       next()
     } catch (e) {
       console.error(e)
-      res.status(401)
-      throw new Error('Unauthorized entry! Bad Token.')
+      errorCondition(res, 401, 'Unauthorized entry! Bad Token.')
     }
   } else {
-    res.status(401)
-    throw new Error('Unauthorized entry!')
+    errorCondition(res, 401, 'Unauthorized entry!')
   }
 })
 
@@ -27,7 +29,6 @@ export const admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next()
   } else {
-    res.status(401)
-    throw new Error('Unauthorized entry! Not an admin.')
+    errorCondition(res, 401, 'Unauthorized entry! Not an admin.')
   }
 }
