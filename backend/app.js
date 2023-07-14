@@ -6,6 +6,7 @@ dotenv.config()
 import { connectDB } from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
 import cookieParser from 'cookie-parser'
+import orderRoutes from './routes/orderRoutes.js'
 
 const port = process.env.PORT
 
@@ -16,12 +17,13 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   res.send('API IS RUNNING')
 })
 
 app.use('/api/product/', productRoutes)
 app.use('/api/user/', userRoutes)
+app.use('/api/order/', orderRoutes)
 
 app.use(notFound)
 
