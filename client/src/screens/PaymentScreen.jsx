@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import FormContainer from './FormContainer'
-import CheckoutSteps from './CheckoutSteps'
+import FormContainer from '../components/FormContainer'
+import CheckoutSteps from '../components/CheckoutSteps'
 import { Button, Col, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
