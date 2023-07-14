@@ -35,7 +35,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({ message: 'Logged out successfully.' })
 })
 
-export const loginUser = asyncHandler(async (req, res, next) => {
+export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
 
   const user = await User.findOne({ email })
@@ -54,7 +54,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   }
 })
 
-export const getUserProfile = asyncHandler(async (req, res, next) => {
+export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
   const { _id, email, password } = user
   if (user) {
@@ -64,7 +64,7 @@ export const getUserProfile = asyncHandler(async (req, res, next) => {
   }
 })
 
-export const updateProfile = asyncHandler(async (req, res, next) => {
+export const updateProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id)
 
   if (user) {
@@ -85,18 +85,18 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
   })
 })
 
-export const getAllUsers = asyncHandler(async (req, res, next) => {
+export const getAllUsers = asyncHandler(async (req, res) => {
   res.send('Get all users')
 })
 
-export const getUser = asyncHandler(async (req, res, next) => {
+export const getUser = asyncHandler(async (req, res) => {
   res.send('Get User by ID')
 })
 
-export const deleteUsers = asyncHandler(async (req, res, next) => {
+export const deleteUsers = asyncHandler(async (req, res) => {
   res.send('DELETED')
 })
 
-export const updateUser = asyncHandler(async (req, res, next) => {
+export const updateUser = asyncHandler(async (req, res) => {
   res.send('UPDATE user')
 })
