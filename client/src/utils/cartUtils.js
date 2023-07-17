@@ -1,4 +1,5 @@
-export const addDecimals = num => (Math.round(num * 100) / 100).toFixed(2)
+export const addDecimals = num =>
+  Number((Math.round(num * 100) / 100).toFixed(2))
 
 export const updateCart = state => {
   // item price
@@ -7,14 +8,14 @@ export const updateCart = state => {
   )
 
   // Shipping price
-  state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 0 : 10)
+  state.shippingPrice = addDecimals(state.itemPrice > 100 ? 0 : 10)
 
   // Tax price (6%)
-  state.taxPrice = addDecimals(Number(0.06 * state.itemsPrice))
+  state.taxPrice = addDecimals(0.06 * state.itemPrice)
 
   // Total price
   state.totalPrice = addDecimals(
-    Number(state.itemPrice + state.shippingPrice + state.taxPrice)
+    state.itemPrice + state?.shippingPrice + state.taxPrice
   )
 
   localStorage.setItem('cart', JSON.stringify(state))
