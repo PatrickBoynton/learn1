@@ -1,15 +1,16 @@
 import { Link, useParams } from 'react-router-dom'
 import {
   useGetOrderDetailsQuery,
-  useGetPaypalClientIdQuery,
+  useGetPayPalClientIdQuery,
   usePayOrderMutation,
 } from '../slices/ordersApiSlice'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { Col, ListGroup, Row, Image, Card } from 'react-bootstrap'
-import { usePayPalScriptReducer } from '@paypal/react-paypal-js'
+import { Col, ListGroup, Row, Image, Card, Button } from 'react-bootstrap'
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 const OrderScreen = () => {
   const { id } = useParams()
@@ -21,7 +22,7 @@ const OrderScreen = () => {
     data: paypal,
     isLoading: loadingPayPal,
     error: paypalError,
-  } = useGetPaypalClientIdQuery()
+  } = useGetPayPalClientIdQuery()
   const { userInfo } = useSelector(state => state.auth)
 
   useEffect(() => {
@@ -42,6 +43,37 @@ const OrderScreen = () => {
       }
     }
   }, [order, paypal, paypalDispatch, loadingPayPal, paypalError])
+
+  const onApproveTest = async () => {
+    await payOrder({ id, details: { payer: {} } })
+    refetch()
+    toast.success('Payment successful')
+  }
+
+  const onApprove = (data, actions) =>
+    actions
+      .order()
+      .capture()
+      .then(async details => {
+        try {
+          await payOrder({ id, details })
+          refetch()
+          toast.success('Payment successful')
+        } catch (e) {
+          toast.error(e?.data?.message || e.message)
+        }
+      })
+
+  const createOrder = (data, actions) =>
+    actions.order
+      .create({
+        purchase_units: [{ amount: { value: order.totalPrice } }],
+      })
+      .then(orderId => orderId)
+
+  const onError = e => {
+    toast.error(e.message)
+  }
 
   return isLoading ? (
     <Loader />
@@ -141,6 +173,28 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice.toFixed(2)}</Col>
                 </Row>
               </ListGroup.Item>
+
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay || isPending ? (
+                    <Loader />
+                  ) : (
+                    <div>
+                      <Button
+                        onClick={onApproveTest}
+                        style={{ marginBottom: '10px' }}>
+                        Test Pay Order
+                      </Button>
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}></PayPalButtons>
+                      </div>
+                    </div>
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>
