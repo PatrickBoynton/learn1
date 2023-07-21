@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import {
+  useDeliverOrderMutation,
   useGetOrderDetailsQuery,
   useGetPayPalClientIdQuery,
   usePayOrderMutation,
@@ -17,6 +18,8 @@ const OrderScreen = () => {
 
   const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(id)
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation()
+  const [deliverOrder, { isLoading: loadingDelivery }] =
+    useDeliverOrderMutation()
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer()
   const {
     data: paypal,
@@ -73,6 +76,16 @@ const OrderScreen = () => {
 
   const onError = e => {
     toast.error(e.message)
+  }
+
+  const deliverOrderHandler = async orderId => {
+    try {
+      await deliverOrder(orderId)
+      refetch()
+      toast.success('Order delivered')
+    } catch (e) {
+      toast.error(e?.data?.message || e.message)
+    }
   }
 
   return isLoading ? (
@@ -196,6 +209,20 @@ const OrderScreen = () => {
                 </ListGroup.Item>
               )}
             </ListGroup>
+            {loadingDelivery && <Loader />}
+            {userInfo &&
+              userInfo.isAdmin &&
+              order.isPaid &&
+              !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={deliverOrderHandler}>
+                    Mark As Delivered
+                  </Button>
+                </ListGroup.Item>
+              )}
           </Card>
         </Col>
       </Row>
