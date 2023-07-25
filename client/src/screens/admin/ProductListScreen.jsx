@@ -10,8 +10,8 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { toast } from 'react-toastify'
 
 const ProductListScreen = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery()
-  const [createProduct, refetch, { isLoading: loadingCreate }] =
+  const { data: products, refetch, isLoading, error } = useGetProductsQuery()
+  const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation()
 
   const deleteHandler = () => {}
