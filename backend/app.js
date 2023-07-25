@@ -8,7 +8,7 @@ import userRoutes from './routes/userRoutes.js'
 import cookieParser from 'cookie-parser'
 import orderRoutes from './routes/orderRoutes.js'
 
-const port = process.env.PORT
+const port = process.env.PORT || Math.round(Math.random() * (5000 - 8000))
 
 connectDB()
 
