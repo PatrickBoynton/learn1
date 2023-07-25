@@ -34,3 +34,25 @@ export const createProduct = asyncHandler(async (req, res) => {
 
   res.status(201).json(createdProduct)
 })
+
+export const editProduct = asyncHandler(async (req, res) => {
+  const { name, price, description, image, brand, category, countInStock } =
+    req.body
+
+  const product = await Product.findById(req.params.id)
+
+  if (product) {
+    product.name = name
+    product.price = price
+    product.description = description
+    product.image = image
+    product.brand = brand
+    product.category = category
+    product.countInStock = countInStock
+
+    const updateProduct = await product.save()
+    res.status(200).json(updateProduct)
+  } else {
+    errorCondition(res, 404, 'Product not found.')
+  }
+})
