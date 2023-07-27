@@ -34,7 +34,7 @@ const LoginScreen = () => {
     try {
       const res = await login({ email, password }).unwrap()
       dispatch(setCredentials({ ...res }))
-      navigate(redirect)
+      navigate(redirect || '/')
     } catch (e) {
       toast.error(e?.data?.message || e.error)
     }
@@ -72,7 +72,7 @@ const LoginScreen = () => {
         {isLoading && <Loader />}
       </Form>
       <Row className="py-3">
-        New Customer?{' '}
+        New Customer
         <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
           Register
         </Link>
