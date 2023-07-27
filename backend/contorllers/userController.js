@@ -85,17 +85,51 @@ export const updateProfile = asyncHandler(async (req, res) => {
 })
 
 export const getAllUsers = asyncHandler(async (req, res) => {
-  res.send('Get all users')
+  const users = await User.find({})
+  res.status(200).json(users)
 })
 
 export const getUser = asyncHandler(async (req, res) => {
-  res.send('Get User by ID')
+  const user = User.findById(req.params.id).select('-password')
+
+  if (user) {
+    res.status(200).send(user)
+  } else {
+    errorCondition(res, 404, 'This is not the user you were looking for.')
+  }
 })
 
 export const deleteUsers = asyncHandler(async (req, res) => {
-  res.send('DELETED')
+  const user = User.findById(req.params.id)
+
+  if (user) {
+    if (user.isAdmin) {
+      errorCondition(res, 400, "Admins can't be deleted. ")
+    }
+    user.deleteOne({ _id: user._id })
+    res.status(204).json({ message: 'User Deleted.' })
+  } else {
+    errorCondition(res, 404, 'This is not the user you were looking for.')
+  }
 })
 
 export const updateUser = asyncHandler(async (req, res) => {
-  res.send('UPDATE user')
+  const user = await User.findById(req.params.id)
+
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    user.isAdmin = Boolean(req.body.isAdmin)
+
+    const updatedUser = await user.save()
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    })
+  } else {
+    errorCondition(res, 404, 'This is not the user you were looking for.')
+  }
 })
