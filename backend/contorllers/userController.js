@@ -37,7 +37,6 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body
-
   const user = await User.findOne({ email })
 
   if (user && user.matchPassword(password)) {

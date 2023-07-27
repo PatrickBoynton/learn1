@@ -11,7 +11,7 @@ import { Button, Form } from 'react-bootstrap'
 import { toast } from 'react-toastify'
 
 const ProductEditScreen = () => {
-  const { id: _id } = useParams()
+  const { id } = useParams()
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0)
   const [image, setImage] = useState('')
@@ -42,7 +42,7 @@ const ProductEditScreen = () => {
   const submitHandler = async e => {
     e.preventDefault()
     const updatedProduct = {
-      _id,
+      _id: id,
       name,
       price,
       image,
