@@ -56,3 +56,14 @@ export const editProduct = asyncHandler(async (req, res) => {
     errorCondition(res, 404, 'Product not found.')
   }
 })
+
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id)
+
+  if (product) {
+    await Product.deleteOne({ _id: product._id })
+    res.status(200).json({ message: 'Product deleted' })
+  } else {
+    errorCondition(res, 404, 'Product not found')
+  }
+})
