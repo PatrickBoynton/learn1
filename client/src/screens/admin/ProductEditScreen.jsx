@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import {
   useGetProductQuery,
   useUpdateProductMutation,
+  useUploadProductImageMutation,
 } from '../../slices/productApiSlice'
 import FormContainer from '../../components/FormContainer'
 import Loader from '../../components/Loader'
@@ -39,6 +40,9 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation()
 
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation()
+
   const submitHandler = async e => {
     e.preventDefault()
     const updatedProduct = {
@@ -59,6 +63,19 @@ const ProductEditScreen = () => {
     } else {
       toast.success('Product updated.')
       navigate('/admin/product-list')
+    }
+  }
+
+  const uploadFileHandler = async e => {
+    console.log(e.target.files[0])
+    const formData = new formData()
+    formData.append('image', e.target.files[0])
+    try {
+      const res = await uploadProductImage(formData)
+      toast.success(res.message)
+      setImage(res.image)
+    } catch (e) {
+      toast.error(e?.data?.message || e.error)
     }
   }
 
@@ -103,6 +120,11 @@ const ProductEditScreen = () => {
                 placeholder="Enter url"
                 value={image}
                 onChange={e => setImage(e.target.value)}
+              />
+              <Form.Control
+                type="file"
+                label="Choose a file"
+                onChange={uploadFileHandler}
               />
             </Form.Group>
 
