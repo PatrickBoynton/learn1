@@ -1,19 +1,33 @@
-import { useGetUsersQuery } from '../../slices/usersApiSlice'
+import {
+  useDeleteUserMutation,
+  useGetUsersQuery,
+} from '../../slices/usersApiSlice'
 import Loader from '../../components/Loader'
 import Message from '../../components/Message'
 import { Button, Table } from 'react-bootstrap'
 import { FaCheck, FaEdit, FaTimes, FaTrash } from 'react-icons/fa'
 import { LinkContainer } from 'react-router-bootstrap'
+import { toast } from 'react-toastify'
 
 const UserListScreen = () => {
   const { data: users, refetch, isLoading, error } = useGetUsersQuery()
 
+  const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation()
   const deleteHandler = async id => {
-    console.log('DELETED')
+    if (window.confirm('Are you sure you want to delete the user?')) {
+      try {
+        await deleteUser(id)
+        toast.success('User deleted!')
+        refetch()
+      } catch (e) {
+        toast.error(e?.data?.message || e.error)
+      }
+    }
   }
   return (
     <>
       <h1>Users</h1>
+      {loadingDelete && <Loader />}
       {isLoading ? (
         <Loader />
       ) : error ? (
