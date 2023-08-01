@@ -90,10 +90,10 @@ export const getAllUsers = asyncHandler(async (req, res) => {
 })
 
 export const getUser = asyncHandler(async (req, res) => {
-  const user = User.findById(req.params.id).select('-password')
+  const user = await User.findById(req.params.id).select('-password')
 
   if (user) {
-    res.status(200).send(user)
+    res.status(200).json(user)
   } else {
     errorCondition(res, 404, 'This is not the user you were looking for.')
   }
