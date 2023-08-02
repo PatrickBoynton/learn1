@@ -29,6 +29,7 @@ app.use('/api/user/', userRoutes)
 app.use('/api/order/', orderRoutes)
 app.use('/api/upload/', uploadRoutes)
 
+// TODO add the client id to the .env file.
 app.get('/api/config/paypal', (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
