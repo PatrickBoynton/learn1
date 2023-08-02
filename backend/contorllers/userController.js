@@ -7,14 +7,15 @@ export const registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password } = req.body
   const userExists = await User.findOne({ email })
   if (userExists) {
-    res.status(400)
-    throw new Error('User already exists!')
+    errorCondition(res, 400, 'User already exists.')
   }
 
   const user = await User.create({ name, email, password })
 
   if (user) {
     generateToken(res, user._id)
+
+    await user.save()
 
     res.status(201).json({
       _id: user._id,
@@ -100,13 +101,13 @@ export const getUser = asyncHandler(async (req, res) => {
 })
 
 export const deleteUsers = asyncHandler(async (req, res) => {
-  const user = User.findById(req.params.id)
+  const user = await User.findById(req.params.id)
 
   if (user) {
     if (user.isAdmin) {
       errorCondition(res, 400, "Admins can't be deleted. ")
     }
-    user.deleteOne({ _id: user._id })
+    await user.deleteOne({ _id: user._id })
     res.status(204).json({ message: 'User Deleted.' })
   } else {
     errorCondition(res, 404, 'This is not the user you were looking for.')
@@ -123,12 +124,7 @@ export const updateUser = asyncHandler(async (req, res) => {
 
     const updatedUser = await user.save()
 
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-    })
+    res.status(200).json(updatedUser)
   } else {
     errorCondition(res, 404, 'This is not the user you were looking for.')
   }
