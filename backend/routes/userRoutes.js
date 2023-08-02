@@ -25,6 +25,6 @@ router.put('/profile', protect, updateProfile)
 
 router.delete('/:id', protect, admin, deleteUsers)
 router.get('/:id', getUser)
-router.put('/:id', updateUser)
+router.put('/:id', protect, admin, updateUser)
 
 export default router
