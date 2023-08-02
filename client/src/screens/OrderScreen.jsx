@@ -35,7 +35,7 @@ const OrderScreen = () => {
         paypalDispatch({
           type: 'resetOptions',
           value: {
-            clientId,
+            'client-id': clientId,
             currency: 'USD',
           },
         })
@@ -122,15 +122,13 @@ const OrderScreen = () => {
           </ListGroup>
           <ListGroup.Item>
             <h2>Payment Method</h2>
-            <p>
-              <strong>Method: </strong>
-              {order.method}
-              {order.isPaid ? (
-                <Message variant="success">Paid on: {order.paidAt}</Message>
-              ) : (
-                <Message variant="danger">Not paid</Message>
-              )}
-            </p>
+            <strong>Method: </strong>
+            {order.method}
+            {order.isPaid ? (
+              <Message variant="success">Paid on: {order.paidAt}</Message>
+            ) : (
+              <Message variant="danger">Not paid</Message>
+            )}
           </ListGroup.Item>
 
           <ListGroup.Item>
@@ -202,7 +200,9 @@ const OrderScreen = () => {
                         <PayPalButtons
                           createOrder={createOrder}
                           onApprove={onApprove}
-                          onError={onError}></PayPalButtons>
+                          onError={onError}
+                          style={{ width: '20px' }}
+                        />
                       </div>
                     </div>
                   )}
