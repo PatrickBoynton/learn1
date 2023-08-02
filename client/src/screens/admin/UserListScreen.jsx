@@ -33,7 +33,7 @@ const UserListScreen = () => {
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Table striped border hover responsive className="table-sm">
+        <Table striped border={1} hover responsive className="table-sm">
           <thead>
             <tr>
               <th>Id</th>
@@ -44,7 +44,7 @@ const UserListScreen = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
+            {users?.map(user => (
               <tr key={user._id}>
                 <td>{user._id}</td>
                 <td>{user.name}</td>
@@ -59,7 +59,7 @@ const UserListScreen = () => {
                   )}
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/user/${user._id}`}>
+                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
                     <Button variant="light" className="btn-sm">
                       <FaEdit />
                     </Button>
