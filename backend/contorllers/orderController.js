@@ -14,13 +14,12 @@ export const addOrderItems = asyncHandler(async (req, res) => {
   } = req.body
 
   if (orderItems && orderItems.length === 0) {
-    res.status(400)
-    throw new Error('No order items.')
+    errorCondition(res, 400, 'No order items.')
   } else {
     const order = new Order({
       orderItems: orderItems.map(item => ({
         ...item,
-        product: item._id,
+        product: item.product,
         _id: undefined,
       })),
       user: req.user._id,
@@ -52,8 +51,7 @@ export const getOrderById = asyncHandler(async (req, res) => {
   if (order) {
     res.status(200).json(order)
   } else {
-    res.status(404)
-    throw new Error('Order not found.')
+    errorCondition(res, 404, 'Order not found.')
   }
 })
 
