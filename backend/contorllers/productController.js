@@ -67,3 +67,38 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     errorCondition(res, 404, 'Product not found')
   }
 })
+
+export const createProductReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+  const product = await Product.findById(req.params.id)
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      review => review.toString() === req.user._id.toString()
+    )
+
+    if (alreadyReviewed) {
+      errorCondition(res, 400, 'Product already reviewed.')
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+
+    product.reviews.push(review)
+
+    product.numReviews = proudct.reviews.length
+
+    product.rating =
+      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      product.reviews.length
+
+    await product.save()
+
+    res.status(201).json({ message: 'Review added!' })
+  } else {
+    errorCondition(res, 404, 'Product not found.')
+  }
+})
