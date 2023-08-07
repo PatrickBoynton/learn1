@@ -14,9 +14,14 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 const OrderScreen = () => {
-  const { id } = useParams()
+  const { id: orderId } = useParams()
 
-  const { data: order, refetch, isLoading, error } = useGetOrderDetailsQuery(id)
+  const {
+    data: order,
+    refetch,
+    isLoading,
+    error,
+  } = useGetOrderDetailsQuery(orderId)
   const [payOrder, { isLoading: loadingPay }] = usePayOrderMutation()
   const [deliverOrder, { isLoading: loadingDelivery }] =
     useDeliverOrderMutation()
@@ -48,7 +53,7 @@ const OrderScreen = () => {
   }, [order, paypal, paypalDispatch, loadingPayPal, paypalError])
 
   const onApproveTest = async () => {
-    await payOrder({ id, details: { payer: {} } })
+    await payOrder({ orderId, details: { payer: {} } })
     refetch()
     toast.success('Payment successful')
   }
@@ -59,7 +64,7 @@ const OrderScreen = () => {
       .capture()
       .then(async details => {
         try {
-          await payOrder({ id, details })
+          await payOrder({ orderId, details })
           refetch()
           toast.success('Payment successful')
         } catch (e) {
