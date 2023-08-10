@@ -3,8 +3,15 @@ import Product from '../models/productModel.js'
 import { errorCondition } from '../utils/errorCondition.js'
 
 export const getProducts = asyncHandler(async (req, res) => {
+  const pageSize = 2
+  const page = Number(req.query.pageNumber) || 1
+  const count = await Product.countDocuments()
+
   const products = await Product.find({})
-  res.json(products)
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+
+  res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
 export const getProductById = asyncHandler(async (req, res) => {
