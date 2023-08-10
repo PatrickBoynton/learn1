@@ -34,7 +34,8 @@ import UserEditScreen from './screens/admin/UserEditScreen'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route index path="/" element={<HomeScreen />} />
+      <Route index={true} path="/" element={<HomeScreen />} />
+      <Route path="/page/:pageNumber" element={<HomeScreen />} />
       <Route path="/product/:productId" element={<ProductScreen />} />
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
@@ -46,6 +47,11 @@ const router = createBrowserRouter(
         <Route path="/place-order" element={<PlaceOrderScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
         <Route path="/order-list" element={<UserListScreen />} />
+        <Route path="/admin/product-list" element={<ProductListScreen />} />
+        <Route
+          path="/admin/product-list/:pageNumber"
+          element={<ProductListScreen />}
+        />
         <Route path="/order/:id" element={<OrderScreen />} />
       </Route>
 
