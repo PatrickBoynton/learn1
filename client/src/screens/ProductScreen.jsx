@@ -23,6 +23,7 @@ import { toast } from 'react-toastify'
 import Meta from '../components/Meta'
 
 const ProductScreen = () => {
+  const { userInfo } = useSelector(state => state.auth)
   const [qty, setQty] = useState(1)
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
@@ -34,8 +35,6 @@ const ProductScreen = () => {
     isLoading,
     error,
   } = useGetProductQuery(productId)
-
-  const { userInfo } = useSelector(state => state.auth)
 
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation()

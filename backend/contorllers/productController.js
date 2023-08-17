@@ -91,26 +91,26 @@ export const createProductReview = asyncHandler(async (req, res) => {
 
     if (alreadyReviewed) {
       errorCondition(res, 400, 'Product already reviewed.')
+    } else {
+      const review = {
+        name: req.user.name,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      }
+
+      product.reviews.push(review)
+
+      product.numReviews = product.reviews.length
+
+      product.rating =
+        product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+        product.reviews.length
+
+      await product.save()
+
+      res.status(201).json({ message: 'Review added!' })
     }
-
-    const review = {
-      name: req.user.name,
-      rating: Number(rating),
-      comment,
-      user: req.user._id,
-    }
-
-    product.reviews.push(review)
-
-    product.numReviews = product.reviews.length
-
-    product.rating =
-      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
-      product.reviews.length
-
-    await product.save()
-
-    res.status(201).json({ message: 'Review added!' })
   } else {
     errorCondition(res, 404, 'Product not found.')
   }

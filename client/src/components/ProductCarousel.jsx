@@ -6,15 +6,16 @@ import { Link } from 'react-router-dom'
 
 const ProductCarousel = () => {
   const { data: products, isLoading, error } = useGetTopProductsQuery()
+
   return isLoading ? (
     <Loader />
   ) : error ? (
     <Message variant="danger">{error}</Message>
   ) : (
     <Carousel pause="hover" className="bg-dark">
-      {products.map(product => (
-        <Carousel.Item key={product.id}>
-          <Link to={`/product/${product.id}`}>
+      {products?.map(product => (
+        <Carousel.Item key={product.name}>
+          <Link to={`/product/${product?._id}`}>
             <Image src={product.image} alt={product.name} fluid />
             <Carousel.Caption>
               <h2>
