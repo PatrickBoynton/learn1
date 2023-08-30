@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
+import { FaTimes } from 'react-icons/fa'
 
 const SearchBox = () => {
   const navigate = useNavigate()
@@ -28,6 +29,14 @@ const SearchBox = () => {
       />
       <Button type="submitå" variant="outline-success" className="p-2">
         Search
+      </Button>
+      <Button
+        onClick={() => {
+          navigate('/')
+          setKeyword('')
+        }}
+        style={{ backgroundColor: 'transparent', border: 'none' }}>
+        <FaTimes style={{ backgroundColor: 'transparent', color: 'red' }} />
       </Button>
     </Form>
   )
