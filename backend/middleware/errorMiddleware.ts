@@ -1,11 +1,17 @@
-export const notFound = (req, res, next) => {
+import { NextFunction, Request, Response } from 'express'
+
+export const notFound = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const error = new Error(`Not found - ${req.originalUrl}`)
   res.status(404)
   next(error)
 }
 
-export const errorHandler = (err, req, res, next) => {
-  let statusCode = res.statusCode === 200 ? 500 : res.statusCode
+export const errorHandler = (err: any, _: Request, res: Response): void => {
+  let statusCode: number = res.statusCode === 200 ? 500 : res.statusCode
   let message = err.message
 
   if (err.name === 'Cast Error' && err.kind === 'ObjectId') {

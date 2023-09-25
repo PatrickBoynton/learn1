@@ -1,7 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose, { model, Schema } from 'mongoose'
 import bcrypt from 'bcryptjs'
+import { IUser } from '../interfaces/modelInterfaces'
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -38,10 +39,12 @@ userSchema.pre('save', async function (next) {
 })
 
 // Arrow functions don't work here. Scope gets lost.
-userSchema.methods.matchPassword = async function (password) {
+userSchema.methods.matchPassword = async function (
+  password: string
+): Promise<boolean> {
   return await bcrypt.compare(password, this.password)
 }
 
-const User = mongoose.model('User', userSchema)
+const User = model<IUser>('User', userSchema)
 
 export default User

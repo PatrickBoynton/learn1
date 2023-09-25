@@ -1,6 +1,7 @@
-import mongoose from 'mongoose'
+import mongoose, { model, Schema } from 'mongoose'
+import { IOrder } from '../interfaces/modelInterfaces'
 
-const orderSchema = mongoose.Schema(
+const orderSchema = new Schema<IOrder>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -102,6 +103,6 @@ const orderSchema = mongoose.Schema(
   }
 )
 
-const Order = new mongoose.model('Order', orderSchema)
+const Order = model<IOrder>('Order', orderSchema)
 
 export default Order

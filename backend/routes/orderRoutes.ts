@@ -6,8 +6,8 @@ import {
   getOrderById,
   updateOrderToDelivered,
   updateOrderToPaid,
-} from '../contorllers/orderController.js'
-import { protect, admin } from '../middleware/authMiddleware.js'
+} from '../contorllers/orderController'
+import { protect, admin } from '../middleware/authMiddleware'
 
 const router = express.Router()
 

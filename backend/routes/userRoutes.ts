@@ -9,8 +9,8 @@ import {
   registerUser,
   updateProfile,
   updateUser,
-} from '../contorllers/userController.js'
-import { admin, protect } from '../middleware/authMiddleware.js'
+} from '../contorllers/userController'
+import { admin, protect } from '../middleware/authMiddleware'
 
 const router = express.Router()
 

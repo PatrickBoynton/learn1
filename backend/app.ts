@@ -1,13 +1,13 @@
-import express from 'express'
-import productRoutes from './routes/productRoutes.js'
+import express, { Request, Response } from 'express'
+import productRoutes from './routes/productRoutes'
 import dotenv from 'dotenv'
-import { notFound, errorHandler } from './middleware/errorMiddleware.js'
+import { notFound, errorHandler } from './middleware/errorMiddleware'
 dotenv.config()
-import { connectDB } from './config/db.js'
-import userRoutes from './routes/userRoutes.js'
+import { connectDB } from './config/db'
+import userRoutes from './routes/userRoutes'
 import cookieParser from 'cookie-parser'
-import orderRoutes from './routes/orderRoutes.js'
-import uploadRoutes from './routes/uploadRoutes.js'
+import orderRoutes from './routes/orderRoutes'
+import uploadRoutes from './routes/uploadRoutes'
 import path from 'path'
 
 const port = process.env.PORT || Math.round(Math.random() * (5000 - 8000))
@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
-app.get('/', (req, res) => {
+app.get('/', (_: Request, res: Response) => {
   res.send('API IS RUNNING')
 })
 
@@ -30,11 +30,11 @@ app.use('/api/order/', orderRoutes)
 app.use('/api/upload/', uploadRoutes)
 
 // TODO add the client id to the .env file.
-app.get('/api/config/paypal', (req, res) =>
+app.get('/api/config/paypal', (_: Request, res: Response) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 )
 
-const __dirname = path.resolve()
+// const __dirname = path.resolve()
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
