@@ -1,12 +1,12 @@
 export interface IProduct {
   _id?: string
-  user: IUser
+  user?: IUser
   name: string
   image: string
   brand: string
   category: string
   description: string
-  reviews: IReview[]
+  reviews?: IReview[]
   rating: number
   numReviews: number
   price: number
@@ -19,7 +19,7 @@ export interface IUser {
   email: string
   password: string
   isAdmin: boolean
-  matchPassword: (password: string) => Promise<void>
+  matchPassword?: (password: string) => Promise<void>
 }
 
 export interface IReview {
