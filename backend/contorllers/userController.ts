@@ -46,7 +46,8 @@ export const loginUser = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body
     const user = await User.findOne({ email })
-    const isMatch = user?.matchPassword(password)
+    
+    const isMatch = await user?.matchPassword(password)
     if (user && isMatch) {
       generateToken(res, user._id)
 

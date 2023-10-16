@@ -98,7 +98,7 @@ export const createProductReview = asyncHandler(
     const product = await Product.findById(req.params.id)
 
     if (product) {
-      const alreadyReviewed = product.reviews.find(
+      const alreadyReviewed = product.reviews?.find(
         review => review.toString() === req.user._id.toString()
       )
 
@@ -111,16 +111,17 @@ export const createProductReview = asyncHandler(
           comment,
           user: req.user._id,
         }
+        if (product.reviews) {
+          product.reviews.push(review)
 
-        product.reviews.push(review)
+          product.numReviews = product.reviews.length
 
-        product.numReviews = product.reviews.length
-
-        product.rating =
-          product.reviews.reduce(
-            (acc: number, review: any) => acc + review.rating,
-            0
-          ) / product.reviews.length
+          product.rating =
+            product.reviews.reduce(
+              (acc: number, review: any) => acc + review.rating,
+              0
+            ) / product.reviews.length
+        }
 
         await product.save()
 

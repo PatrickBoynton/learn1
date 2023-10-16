@@ -19,7 +19,7 @@ export interface IUser {
   email: string
   password: string
   isAdmin: boolean
-  matchPassword?: (password: string) => Promise<void>
+  matchPassword: (password: string) => Promise<boolean>
 }
 
 export interface IReview {
